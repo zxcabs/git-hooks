@@ -16,12 +16,16 @@ function execScript(script) {
     });
 }
 
+function unlinkSync(filePath) {
+    try {
+        fs.unlinkSync(filePath);
+    } catch (e) {}
+}
+
 Promise
     .all(SCRIPTS.map(execScript))
     .then(stdout => {
-        try {
-            fs.unlinkSync(ERROR_LOG_FILE);
-        } catch (e) {}
+        unlinkSync(ERROR_LOG_FILE);
         process.stdout.write(stdout.toString());
         process.exit(0);
     })
